@@ -42,8 +42,22 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .service(refresh_access_token)
         .service(continue_with_google)
         .service(fetch_account_data)
+        .service(is_username_taken)
         .service(logout)
     );
+}
+
+#[get("/is_username_taken")]
+pub async fn is_username_taken(data: Data<EasyAuthState>, query: web::Query<IsUsernameTakenParams>) -> impl Responder {
+
+    let username: String = query.username.clone();
+    let pool = &data.pool;
+
+    if sqlx::query("SELECT * FROM account where username = $1").bind(username).fetch_all(pool).await.unwrap().len() > 0 {
+        return HttpResponse::Conflict().finish();
+    }
+
+    return HttpResponse::Ok().finish();
 }
 
 
