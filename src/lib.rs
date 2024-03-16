@@ -189,7 +189,7 @@ async fn register_with_google(pool: &Pool<Postgres>, email: &String, name: &Stri
                 return login_with_google(pool, email).await
             }
 
-            // log(format!("Database error during Google registration / {:?}", database_error.message()).as_str());
+            log(format!("Database error during Google registration / {:?}", database_error.message()).as_str());
             Err(GoogleFlowError::VagueError)
         },
         _ => Err(GoogleFlowError::VagueError)
