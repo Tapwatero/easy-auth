@@ -24,8 +24,6 @@ use crate::serde_json::json;
 
 pub struct EasyAuthState {
     pub pool: Pool<Postgres>,
-    pub claim_fields: Vec<String>,
-    pub unique_field: String,
 }
 
 const GET_ACCOUNT_DATA_WITH_UUID_SQL: &str = "select row_to_json(account) as data from account WHERE uuid = $1;";
